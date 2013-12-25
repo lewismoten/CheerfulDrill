@@ -30,7 +30,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 spider.Crawl(file);
                 foreach (Extractor extractor in Extractors)
                 {
-                    Pinches.Add(extractor.Extract(spider.Basket));
+                    Pinches.AddRange(extractor.Extract(spider.Basket));
                 }
             }
         }

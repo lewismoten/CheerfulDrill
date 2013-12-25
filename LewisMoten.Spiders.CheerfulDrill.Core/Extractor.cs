@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
@@ -15,26 +16,47 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         public string Pattern { get; set; }
         public int Group { get; set; }
         public string Default { get; set; }
+        public bool Multiple { get; set; }
 
-        public Pinch Extract(string text)
+        public List<Pinch> Extract(string text)
         {
-            var pinch = new Pinch {Name = Name};
+            var pinches = new List<Pinch>();
 
-            if (string.IsNullOrEmpty(Pattern))
+            if (!string.IsNullOrEmpty(Pattern) && !string.IsNullOrEmpty(text))
             {
-                return pinch;
+                var regex = new Regex(Pattern);
+                if (regex.IsMatch(text))
+                {
+                    if (Multiple)
+                    {
+                        var matches = regex.Matches(text);
+                        foreach (Match match in matches)
+                        {
+                            Add(pinches, match);
+                        }
+                    }
+                    else
+                    {
+                        Add(pinches, regex.Match(text));
+                    }
+                }
             }
-            var regex = new Regex(Pattern);
-            if (regex.IsMatch(text))
+            if (pinches.Count == 0)
             {
-                Match match = regex.Match(text);
-                pinch.Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value;
+                AddDefault(pinches);
             }
-            else
-            {
-                pinch.Value = Default;
-            }
-            return pinch;
+            return pinches;
+        }
+
+        private void AddDefault(ICollection<Pinch> pinches)
+        {
+            pinches.Add(new Pinch() { Name = Name, Value = Default });
+
+        }
+
+        private void Add(ICollection<Pinch> pinches, Match match)
+        {
+            pinches.Add(new Pinch() { Name = Name, Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value });
         }
     }
 }
