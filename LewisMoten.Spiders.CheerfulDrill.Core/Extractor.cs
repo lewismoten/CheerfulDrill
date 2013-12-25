@@ -29,7 +29,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 {
                     if (Multiple)
                     {
-                        var matches = regex.Matches(text);
+                        MatchCollection matches = regex.Matches(text);
                         foreach (Match match in matches)
                         {
                             Add(pinches, match);
@@ -50,13 +50,16 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         private void AddDefault(ICollection<Pinch> pinches)
         {
-            pinches.Add(new Pinch() { Name = Name, Value = Default });
-
+            pinches.Add(new Pinch {Name = Name, Value = Default});
         }
 
         private void Add(ICollection<Pinch> pinches, Match match)
         {
-            pinches.Add(new Pinch() { Name = Name, Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value });
+            pinches.Add(new Pinch
+                {
+                    Name = Name,
+                    Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value
+                });
         }
     }
 }
