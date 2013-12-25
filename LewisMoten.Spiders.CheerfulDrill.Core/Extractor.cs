@@ -16,19 +16,25 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         public int Group { get; set; }
         public string Default { get; set; }
 
-        public string Extract(string text)
+        public Pinch Extract(string text)
         {
+            var pinch = new Pinch {Name = Name};
+
             if (string.IsNullOrEmpty(Pattern))
             {
-                return string.Empty;
+                return pinch;
             }
             var regex = new Regex(Pattern);
             if (regex.IsMatch(text))
             {
-                var match = regex.Match(text);
-                return match.Groups.Count <= Group ? Default : match.Groups[Group].Value;
+                Match match = regex.Match(text);
+                pinch.Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value;
             }
-            return Default;
+            else
+            {
+                pinch.Value = Default;
+            }
+            return pinch;
         }
     }
 }
