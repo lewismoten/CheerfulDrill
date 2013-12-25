@@ -10,6 +10,9 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         {
             var extractor = new Extractor();
             Assert.That(extractor.Pattern, Is.Empty);
+            Assert.That(extractor.Name, Is.Empty);
+            Assert.That(extractor.Default, Is.Empty);
+            Assert.That(extractor.Group, Is.EqualTo(0));
         }
 
         [Test]
@@ -32,8 +35,16 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         public void ReturnsValueOfSpecifiedGroup()
         {
             var extractor = new Extractor {Pattern = @"be\s*([\d]+)\s*", Group = 1};
-            string value = extractor.Extract("If every person had a smile, it would be 64 trillion miles of smiles");
+            string value = extractor.Extract("If every person had a smile, it would be 64 trillion miles of smiles.");
             Assert.That(value, Is.EqualTo("64"));
+        }
+
+        [Test]
+        public void ReturnsDefaultValue()
+        {
+            var extractor = new Extractor {Pattern = @"\s*(f[^\s]*t)\s*", Group = 2, Default = "not found"};
+            string value = extractor.Extract("If the first bug is plaid, then I will be impressed.");
+            Assert.That(value, Is.EqualTo("not found"));
         }
 
         [Test]

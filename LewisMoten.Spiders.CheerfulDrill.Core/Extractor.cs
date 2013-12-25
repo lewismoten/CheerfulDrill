@@ -7,10 +7,14 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         public Extractor()
         {
             Pattern = string.Empty;
+            Name = string.Empty;
+            Default = string.Empty;
         }
 
+        public string Name { get; set; }
         public string Pattern { get; set; }
         public int Group { get; set; }
+        public string Default { get; set; }
 
         public string Extract(string text)
         {
@@ -19,7 +23,12 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 return string.Empty;
             }
             var regex = new Regex(Pattern);
-            return regex.IsMatch(text) ? regex.Match(text).Groups[Group].Value : string.Empty;
+            if (regex.IsMatch(text))
+            {
+                var match = regex.Match(text);
+                return match.Groups.Count <= Group ? Default : match.Groups[Group].Value;
+            }
+            return Default;
         }
     }
 }
