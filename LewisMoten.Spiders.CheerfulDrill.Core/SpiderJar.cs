@@ -7,7 +7,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
     public class SpiderJar
     {
         private readonly List<Extractor> _extractors = new List<Extractor>();
-        public string CSV;
+        public string Csv;
 
         public string Path { get; set; }
         public string SearchPattern { get; set; }
@@ -21,13 +21,13 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         protected virtual void OnPinch(Pinch pinch)
         {
-            if (!string.IsNullOrEmpty(CSV))
+            if (!string.IsNullOrEmpty(Csv))
             {
-                if (!File.Exists(CSV))
+                if (!File.Exists(Csv))
                 {
-                    File.AppendAllLines(CSV, new[] {pinch.Name});
+                    File.AppendAllLines(Csv, new[] {pinch.Name});
                 }
-                File.AppendAllLines(CSV, new[] {pinch.Value});
+                File.AppendAllLines(Csv, new[] {pinch.Value});
             }
 
             EventHandler<PinchEventArgs> handler = Pinch;
@@ -36,11 +36,11 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         public void Shake()
         {
-            if (!string.IsNullOrEmpty(CSV))
+            if (!string.IsNullOrEmpty(Csv))
             {
-                if (File.Exists(CSV))
+                if (File.Exists(Csv))
                 {
-                    File.Delete(CSV);
+                    File.Delete(Csv);
                 }
             }
             var spider = new Spider();
