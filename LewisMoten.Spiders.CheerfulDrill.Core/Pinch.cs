@@ -23,9 +23,14 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         public override string ToString()
         {
+            if (Value == null)
+            {
+                return string.Empty;
+            }
+
             if (Pinches.Count == 0)
             {
-                return string.Format("<{0}>{1}</{0}>", Name, Value);
+                return string.Format("<{0}>{1}</{0}>", Encode(Name), Encode(Value));
             }
             var sb = new StringBuilder();
             sb.AppendFormat(@"<{0}>", Name);
@@ -36,6 +41,11 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             sb.AppendFormat(@"</{0}>", Name);
 
             return sb.ToString();
+        }
+
+        private string Encode(string text)
+        {
+            return text.Replace("&", "&amp;");
         }
     }
 }

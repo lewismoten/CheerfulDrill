@@ -8,6 +8,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
     {
         private readonly List<Extractor> _extractors = new List<Extractor>();
         public string Csv;
+        private int _count;
         public string Xml { get; set; }
 
         public string Path { get; set; }
@@ -22,6 +23,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         protected virtual void OnPinch(Pinch pinch)
         {
+            Console.WriteLine(++_count);
             if (!string.IsNullOrEmpty(Csv))
             {
                 if (!File.Exists(Csv))
@@ -33,10 +35,6 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
             if (!string.IsNullOrEmpty(Xml))
             {
-                if (!File.Exists(Xml))
-                {
-                    File.AppendAllText(Xml, "<root>");
-                }
                 File.AppendAllText(Xml, pinch.ToString());
             }
 
@@ -46,6 +44,8 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         public void Shake()
         {
+            _count = 0;
+
             if (!string.IsNullOrEmpty(Csv))
             {
                 if (File.Exists(Csv))
@@ -60,19 +60,27 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 {
                     File.Delete(Xml);
                 }
+                File.AppendAllText(Xml, "<root>");
             }
 
             var spider = new Spider();
             spider.Extractors.AddRange(Extractors);
             spider.Pinch += (sender, e) => OnPinch(e.Pinch);
             string[] files = Directory.GetFiles(Path, SearchPattern, SearchOption.AllDirectories);
-            foreach (string file in files)
+
+            try
             {
-                spider.Crawl(file);
+                foreach (string file in files)
+                {
+                    spider.Crawl(file);
+                }
             }
-            if (File.Exists(Xml))
+            finally
             {
-                File.AppendAllText(Xml, "</root>");
+                if (File.Exists(Xml))
+                {
+                    File.AppendAllText(Xml, "</root>");
+                }
             }
         }
     }

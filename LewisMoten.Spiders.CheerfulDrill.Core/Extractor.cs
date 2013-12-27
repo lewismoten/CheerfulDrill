@@ -11,7 +11,6 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         {
             Pattern = string.Empty;
             Name = string.Empty;
-            Default = string.Empty;
         }
 
         public string Name { get; set; }

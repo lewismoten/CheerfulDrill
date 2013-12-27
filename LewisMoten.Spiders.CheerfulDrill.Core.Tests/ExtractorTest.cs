@@ -12,7 +12,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             var extractor = new Extractor();
             Assert.That(extractor.Pattern, Is.Empty);
             Assert.That(extractor.Name, Is.Empty);
-            Assert.That(extractor.Default, Is.Empty);
+            Assert.That(extractor.Default, Is.Null);
             Assert.That(extractor.Group, Is.EqualTo(0));
             Assert.That(extractor.Multiple, Is.False);
         }
@@ -52,7 +52,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         [Test]
         public void ExtractionWithoutPatternReturnsNothing()
         {
-            var extractor = new Extractor {Pattern = string.Empty};
+            var extractor = new Extractor {Pattern = string.Empty, Default = string.Empty};
             List<Pinch> pinches = extractor.Extract("an example");
             Assert.That(pinches, Has.All.Property("Value").Empty);
         }
