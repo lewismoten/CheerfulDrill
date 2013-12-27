@@ -18,6 +18,30 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         }
 
         [Test]
+        public void ExtractionReturnsHeirachricalData()
+        {
+            var extractor = new Extractor {Name = "Person", Pattern = @"<person[\s\S]*?/person>", Multiple = true};
+            extractor.Bits.Add(new Extractor {Name = "Id", Pattern = @"id=""([^""]*)""", Group = 1});
+            extractor.Bits.Add(new Extractor {Name = "FullName", Pattern = @">([^<]*)<", Group = 1});
+
+            List<Pinch> pinches =
+                extractor.Extract(@"<people><person id=""1"">Jim</person><person id=""2"">Joe</person></people>");
+
+            Assert.That(pinches, Has.Count.EqualTo(2));
+            Assert.That(pinches, Has.All.Property("Name").EqualTo("Person"));
+
+            List<Pinch> first = pinches[0].Pinches;
+            Assert.That(first, Has.Count.EqualTo(2));
+            Assert.That(first, Has.Exactly(1).Property("Name").EqualTo("Id").And.Property("Value").EqualTo("1"));
+            Assert.That(first, Has.Exactly(1).Property("Name").EqualTo("FullName").And.Property("Value").EqualTo("Jim"));
+
+            List<Pinch> second = pinches[1].Pinches;
+            Assert.That(second, Has.Count.EqualTo(2));
+            Assert.That(second, Has.Exactly(1).Property("Name").EqualTo("Id").And.Property("Value").EqualTo("2"));
+            Assert.That(second, Has.Exactly(1).Property("Name").EqualTo("FullName").And.Property("Value").EqualTo("Joe"));
+        }
+
+        [Test]
         public void ExtractionReturnsName()
         {
             var extractor = new Extractor {Name = "Hello World"};

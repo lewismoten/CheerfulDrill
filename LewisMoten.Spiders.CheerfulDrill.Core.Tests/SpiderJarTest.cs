@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using NUnit.Framework;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
@@ -45,6 +46,38 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             Assert.That(lines, Has.Member("How to run"));
             Assert.That(lines, Has.Member("How to jog"));
             Assert.That(lines, Has.Member("The joys of crawling"));
+        }
+
+        [Test]
+        public void ExportXml()
+        {
+            var extractor = new Extractor
+                {
+                    Pattern = "<h1>([^<]*)</h1>",
+                    Group = 1,
+                    Name = "book-title",
+                    Multiple = true
+                };
+
+            SpiderJar jar = GetSpiderJar(extractor);
+            var pinches = new List<Pinch>();
+            jar.Pinch += (sender, e) => pinches.Add(e.Pinch);
+
+            string path = "SpiderJarTest.ExportXml.csv";
+            jar.Xml = path;
+
+            jar.Shake();
+
+            Assert.That(File.Exists(path));
+
+            var xml = new XmlDocument();
+            xml.Load(path);
+
+            XmlNodeList titles = xml.SelectNodes("/root/book-title");
+            Assert.That(titles, Is.Not.Null);
+            Assert.That(titles, Has.Exactly(1).Property("InnerText").EqualTo("The joys of crawling"));
+            Assert.That(titles, Has.Exactly(1).Property("InnerText").EqualTo("How to run"));
+            Assert.That(titles, Has.Exactly(1).Property("InnerText").EqualTo("How to jog"));
         }
 
         [Test]

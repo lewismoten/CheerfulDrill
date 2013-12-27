@@ -5,6 +5,8 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
     public class Extractor
     {
+        private readonly List<Extractor> _bits = new List<Extractor>();
+
         public Extractor()
         {
             Pattern = string.Empty;
@@ -17,6 +19,11 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         public int Group { get; set; }
         public string Default { get; set; }
         public bool Multiple { get; set; }
+
+        public List<Extractor> Bits
+        {
+            get { return _bits; }
+        }
 
         public List<Pinch> Extract(string text)
         {
@@ -55,11 +62,14 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         private void Add(ICollection<Pinch> pinches, Match match)
         {
-            pinches.Add(new Pinch
-                {
-                    Name = Name,
-                    Value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value
-                });
+            string value = match.Groups.Count <= Group ? Default : match.Groups[Group].Value;
+            var pinch = new Pinch {Name = Name, Value = value};
+            pinches.Add(pinch);
+            if (Bits.Count == 0) return;
+            foreach (Extractor extractor in Bits)
+            {
+                pinch.Pinches.AddRange(extractor.Extract(value));
+            }
         }
     }
 }

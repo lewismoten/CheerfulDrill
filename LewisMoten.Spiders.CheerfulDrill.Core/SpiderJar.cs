@@ -8,6 +8,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
     {
         private readonly List<Extractor> _extractors = new List<Extractor>();
         public string Csv;
+        public string Xml { get; set; }
 
         public string Path { get; set; }
         public string SearchPattern { get; set; }
@@ -30,6 +31,15 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 File.AppendAllLines(Csv, new[] {pinch.Value});
             }
 
+            if (!string.IsNullOrEmpty(Xml))
+            {
+                if (!File.Exists(Xml))
+                {
+                    File.AppendAllText(Xml, "<root>");
+                }
+                File.AppendAllText(Xml, pinch.ToString());
+            }
+
             EventHandler<PinchEventArgs> handler = Pinch;
             if (handler != null) handler(this, new PinchEventArgs(pinch));
         }
@@ -43,6 +53,15 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                     File.Delete(Csv);
                 }
             }
+
+            if (!string.IsNullOrEmpty(Xml))
+            {
+                if (File.Exists(Xml))
+                {
+                    File.Delete(Xml);
+                }
+            }
+
             var spider = new Spider();
             spider.Extractors.AddRange(Extractors);
             spider.Pinch += (sender, e) => OnPinch(e.Pinch);
@@ -50,6 +69,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             foreach (string file in files)
             {
                 spider.Crawl(file);
+            }
+            if (File.Exists(Xml))
+            {
+                File.AppendAllText(Xml, "</root>");
             }
         }
     }
