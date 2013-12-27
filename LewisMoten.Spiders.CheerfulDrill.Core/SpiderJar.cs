@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
     public class SpiderJar
     {
+        private static readonly object SynchronizationLock = new object();
+
         private readonly List<Extractor> _extractors = new List<Extractor>();
         public string Csv;
         private int _count;
@@ -26,16 +30,22 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             Console.WriteLine(++_count);
             if (!string.IsNullOrEmpty(Csv))
             {
-                if (!File.Exists(Csv))
+                lock (SynchronizationLock)
                 {
-                    File.AppendAllLines(Csv, new[] {pinch.Name});
+                    if (!File.Exists(Csv))
+                    {
+                        File.AppendAllLines(Csv, new[] {pinch.Name});
+                    }
+                    File.AppendAllLines(Csv, new[] {pinch.Value});
                 }
-                File.AppendAllLines(Csv, new[] {pinch.Value});
             }
 
             if (!string.IsNullOrEmpty(Xml))
             {
-                File.AppendAllText(Xml, pinch.ToString());
+                lock (SynchronizationLock)
+                {
+                    File.AppendAllText(Xml, pinch.ToString());
+                }
             }
 
             EventHandler<PinchEventArgs> handler = Pinch;
@@ -43,6 +53,11 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         }
 
         public void Shake()
+        {
+            Shake(CancellationToken.None);
+        }
+
+        public void Shake(CancellationToken cancellationToken)
         {
             _count = 0;
 
@@ -70,10 +85,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
             try
             {
-                foreach (string file in files)
-                {
-                    spider.Crawl(file);
-                }
+                var options = new ParallelOptions();
+                options.CancellationToken = cancellationToken;
+                options.MaxDegreeOfParallelism = Environment.ProcessorCount*2;
+                Parallel.ForEach(files, options, spider.Crawl);
             }
             finally
             {

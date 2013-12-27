@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.chooseSourceButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.sourcePathTextBox = new System.Windows.Forms.TextBox();
@@ -39,6 +40,11 @@
             this.startButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label4 = new System.Windows.Forms.Label();
+            this.taskStatusLabel = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // chooseSourceButton
@@ -128,13 +134,60 @@
             this.startButton.TabIndex = 8;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            this.startButton.Click += new System.EventHandler(this.StartButtonClick);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Enabled = false;
+            this.stopButton.Location = new System.Drawing.Point(83, 129);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(65, 23);
+            this.stopButton.TabIndex = 9;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.StopButtonClick);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(154, 134);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(40, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Status:";
+            // 
+            // taskStatusLabel
+            // 
+            this.taskStatusLabel.AutoSize = true;
+            this.taskStatusLabel.Location = new System.Drawing.Point(200, 134);
+            this.taskStatusLabel.Name = "taskStatusLabel";
+            this.taskStatusLabel.Size = new System.Drawing.Size(33, 13);
+            this.taskStatusLabel.TabIndex = 11;
+            this.taskStatusLabel.Text = "None";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 172);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "label5";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 373);
+            this.ClientSize = new System.Drawing.Size(284, 191);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.taskStatusLabel);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.stopButton);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.chooseTargetButton);
             this.Controls.Add(this.targetFileTextBox);
@@ -164,6 +217,11 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label taskStatusLabel;
+        private System.Windows.Forms.Label label5;
     }
 }
 

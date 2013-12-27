@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using LewisMoten.Spiders.CheerfulDrill.Core;
 using LewisMoten.Spiders.CheerfulDrill.UI.Properties;
@@ -7,6 +9,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
 {
     public partial class Form1 : Form
     {
+        public EventHandler Hello;
+        private CancellationTokenSource _cancellationTokenSource;
+        private Task _task;
+
         public Form1()
         {
             InitializeComponent();
@@ -41,16 +47,48 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             }
         }
 
-        private void startButton_Click(object sender, EventArgs e)
+        private void StartButtonClick(object sender, EventArgs e)
+        {
+            startButton.Enabled = false;
+            stopButton.Enabled = true;
+            Application.DoEvents();
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            _task = Task.Factory.StartNew(Shake, _cancellationTokenSource.Token);
+        }
+
+        private void StopButtonClick(object sender, EventArgs e)
+        {
+            if (_cancellationTokenSource != null) _cancellationTokenSource.Cancel();
+            stopButton.Enabled = false;
+        }
+
+        private void Shake()
         {
             var jar = new SpiderJar();
-
 
             jar.Path = sourcePathTextBox.Text;
             jar.SearchPattern = sourcePatternTextBox.Text;
             jar.Xml = targetFileTextBox.Text;
 
-            jar.Shake();
+            jar.Shake(_cancellationTokenSource.Token);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (_task != null)
+            {
+                taskStatusLabel.Text = _task.Status.ToString();
+                if (_task.IsCompleted)
+                {
+                    startButton.Enabled = true;
+                    stopButton.Enabled = false;
+                    _task.Dispose();
+                    _task = null;
+                }
+            }
+
+            Application.DoEvents();
         }
     }
 }
