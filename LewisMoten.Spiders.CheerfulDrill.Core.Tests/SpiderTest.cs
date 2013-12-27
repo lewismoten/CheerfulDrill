@@ -17,7 +17,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         [Test]
         public void FileContentsPlacedInBasket()
         {
-            string path = "Sample1.html";
+            const string path = "Sample1.html";
             var spider = new Spider();
             spider.Crawl(path);
             Assert.That(spider.Basket, Is.EqualTo(_sample1));

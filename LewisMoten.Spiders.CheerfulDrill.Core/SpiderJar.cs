@@ -9,10 +9,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
     public class SpiderJar
     {
         private static readonly object SynchronizationLock = new object();
+        private static readonly SpiderJarProgress Progress = new SpiderJarProgress();
 
         private readonly List<Extractor> _extractors = new List<Extractor>();
         public string Csv;
-        private int _count;
         public string Xml { get; set; }
 
         public string Path { get; set; }
@@ -23,11 +23,17 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             get { return _extractors; }
         }
 
+        public IProgress<SpiderJarProgress> ProgressReporter
+        {
+            set { Progress.Reporter = value; }
+        }
+
         public event EventHandler<PinchEventArgs> Pinch;
 
         protected virtual void OnPinch(Pinch pinch)
         {
-            Console.WriteLine(++_count);
+            Progress.FoundRecord();
+
             if (!string.IsNullOrEmpty(Csv))
             {
                 lock (SynchronizationLock)
@@ -59,7 +65,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
 
         public void Shake(CancellationToken cancellationToken)
         {
-            _count = 0;
+            Progress.Reset();
 
             if (!string.IsNullOrEmpty(Csv))
             {
@@ -78,17 +84,18 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                 File.AppendAllText(Xml, "<root>");
             }
 
-            var spider = new Spider();
-            spider.Extractors.AddRange(Extractors);
-            spider.Pinch += (sender, e) => OnPinch(e.Pinch);
             string[] files = Directory.GetFiles(Path, SearchPattern, SearchOption.AllDirectories);
+
+            Progress.InitilizePendingFileCount(files.Length);
 
             try
             {
-                var options = new ParallelOptions();
-                options.CancellationToken = cancellationToken;
-                options.MaxDegreeOfParallelism = Environment.ProcessorCount*2;
-                Parallel.ForEach(files, options, spider.Crawl);
+                var options = new ParallelOptions
+                    {
+                        CancellationToken = cancellationToken,
+                        MaxDegreeOfParallelism = Environment.ProcessorCount*2
+                    };
+                Parallel.ForEach(files, options, ProcessFile);
             }
             finally
             {
@@ -97,6 +104,17 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
                     File.AppendAllText(Xml, "</root>");
                 }
             }
+        }
+
+        private void ProcessFile(string file)
+        {
+            // TODO: Get available spider from a hive factory
+            Progress.FileBeingProcessed();
+            var spider = new Spider();
+            spider.Extractors.AddRange(Extractors);
+            spider.Pinch += (sender, e) => OnPinch(e.Pinch);
+            spider.Crawl(file);
+            Progress.FileHasCompleted();
         }
     }
 }

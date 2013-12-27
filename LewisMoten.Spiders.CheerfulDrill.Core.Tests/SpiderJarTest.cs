@@ -19,7 +19,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         }
 
         [Test]
-        public void ExportCSV()
+        public void ExportCommaSeparatedValues()
         {
             var extractor = new Extractor
                 {
@@ -33,7 +33,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             var pinches = new List<Pinch>();
             jar.Pinch += (sender, e) => pinches.Add(e.Pinch);
 
-            string path = "SpiderJarTest.ExportCSV.csv";
+            const string path = "SpiderJarTest.ExportCommaSeparatedValues.csv";
             jar.Csv = path;
 
             jar.Shake();
@@ -63,7 +63,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             var pinches = new List<Pinch>();
             jar.Pinch += (sender, e) => pinches.Add(e.Pinch);
 
-            string path = "SpiderJarTest.ExportXml.csv";
+            const string path = "SpiderJarTest.ExportXml.csv";
             jar.Xml = path;
 
             jar.Shake();

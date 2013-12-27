@@ -8,9 +8,8 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         [Test]
         public void StringFormatWithDepth()
         {
-            var pinch = new Pinch();
-            pinch.Name = "cookie";
-            pinch.Value = "I am totally ignored here";
+            var pinch = new Pinch {Name = "cookie", Value = "I am totally ignored here"};
+
             pinch.Pinches.Add(new Pinch {Name = "name", Value = "Chocolate Chip"});
             pinch.Pinches.Add(new Pinch {Name = "ingredient", Value = "chocolate"});
 
@@ -21,9 +20,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         [Test]
         public void StringFormatWithNoDepth()
         {
-            var pinch = new Pinch();
-            pinch.Name = "cookie";
-            pinch.Value = "Chocolate";
+            var pinch = new Pinch {Name = "cookie", Value = "Chocolate"};
 
             Assert.That(pinch.ToString(), Is.EqualTo(@"<cookie>Chocolate</cookie>"));
         }

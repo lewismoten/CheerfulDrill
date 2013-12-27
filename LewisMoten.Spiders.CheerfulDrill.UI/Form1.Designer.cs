@@ -45,6 +45,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.taskStatusLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // chooseSourceButton
@@ -138,8 +139,9 @@
             // 
             // stopButton
             // 
+            this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(83, 129);
+            this.stopButton.Location = new System.Drawing.Point(207, 130);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(65, 23);
             this.stopButton.TabIndex = 9;
@@ -150,12 +152,12 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(154, 134);
+            this.label4.Location = new System.Drawing.Point(80, 156);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 10;
@@ -164,7 +166,7 @@
             // taskStatusLabel
             // 
             this.taskStatusLabel.AutoSize = true;
-            this.taskStatusLabel.Location = new System.Drawing.Point(200, 134);
+            this.taskStatusLabel.Location = new System.Drawing.Point(126, 156);
             this.taskStatusLabel.Name = "taskStatusLabel";
             this.taskStatusLabel.Size = new System.Drawing.Size(33, 13);
             this.taskStatusLabel.TabIndex = 11;
@@ -179,11 +181,21 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "label5";
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(83, 130);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(118, 23);
+            this.progressBar1.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 191);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.taskStatusLabel);
             this.Controls.Add(this.label4);
@@ -222,6 +234,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label taskStatusLabel;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

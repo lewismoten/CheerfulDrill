@@ -9,13 +9,27 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
 {
     public partial class Form1 : Form
     {
-        public EventHandler Hello;
+        private static int _filesPending;
+        private static int _filesProcessing;
+        private static int _filesCompleted;
+        private static int _recordsFound;
+        private readonly Progress<SpiderJarProgress> _spiderJarProgress = new Progress<SpiderJarProgress>();
         private CancellationTokenSource _cancellationTokenSource;
         private Task _task;
+
 
         public Form1()
         {
             InitializeComponent();
+            _spiderJarProgress.ProgressChanged += SpiderJarProgressChanged;
+        }
+
+        private void SpiderJarProgressChanged(object sender, SpiderJarProgress e)
+        {
+            _filesPending = e.FilesPending;
+            _filesProcessing = e.FilesProcessing;
+            _filesCompleted = e.FilesCompleted;
+            _recordsFound = e.RecordsFound;
         }
 
         private void ChooseSourceButtonClick(object sender, EventArgs e)
@@ -54,7 +68,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             Application.DoEvents();
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _task = Task.Factory.StartNew(Shake, _cancellationTokenSource.Token);
+            _task = Task.Factory.StartNew(() => Shake(_spiderJarProgress), _cancellationTokenSource.Token);
         }
 
         private void StopButtonClick(object sender, EventArgs e)
@@ -63,9 +77,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             stopButton.Enabled = false;
         }
 
-        private void Shake()
+        private void Shake(IProgress<SpiderJarProgress> progress)
         {
-            var jar = new SpiderJar();
+            var jar = new SpiderJar {ProgressReporter = progress};
+
 
             jar.Path = sourcePathTextBox.Text;
             jar.SearchPattern = sourcePatternTextBox.Text;
@@ -74,7 +89,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             jar.Shake(_cancellationTokenSource.Token);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1Tick(object sender, EventArgs e)
         {
             if (_task != null)
             {
@@ -87,6 +102,22 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
                     _task = null;
                 }
             }
+
+            decimal max = _filesCompleted + _filesPending + _filesProcessing + 0.0m;
+            if (max == 0)
+            {
+                progressBar1.Value = 0;
+            }
+            else if (_filesCompleted >= max)
+            {
+                progressBar1.Value = 100;
+            }
+            else
+            {
+                progressBar1.Value = (int) ((_filesCompleted/max)*100);
+            }
+
+            label5.Text = string.Format(@"Records Found: {0}", _recordsFound);
 
             Application.DoEvents();
         }
