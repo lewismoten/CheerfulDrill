@@ -34,10 +34,24 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtractorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtractorForm.Designer.cs">
+      <DependentUpon>ExtractorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExtractorListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExtractorListControl.Designer.cs">
+      <DependentUpon>ExtractorListControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -46,6 +60,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ExtractorForm.resx">
+      <DependentUpon>ExtractorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExtractorListControl.resx">
+      <DependentUpon>ExtractorListControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

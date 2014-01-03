@@ -46,12 +46,13 @@
             this.taskStatusLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.extractorListControl1 = new LewisMoten.Spiders.CheerfulDrill.UI.ExtractorListControl();
             this.SuspendLayout();
             // 
             // chooseSourceButton
             // 
             this.chooseSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chooseSourceButton.Location = new System.Drawing.Point(237, 23);
+            this.chooseSourceButton.Location = new System.Drawing.Point(425, 23);
             this.chooseSourceButton.Name = "chooseSourceButton";
             this.chooseSourceButton.Size = new System.Drawing.Size(35, 23);
             this.chooseSourceButton.TabIndex = 0;
@@ -74,7 +75,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sourcePathTextBox.Location = new System.Drawing.Point(12, 25);
             this.sourcePathTextBox.Name = "sourcePathTextBox";
-            this.sourcePathTextBox.Size = new System.Drawing.Size(219, 20);
+            this.sourcePathTextBox.Size = new System.Drawing.Size(407, 20);
             this.sourcePathTextBox.TabIndex = 2;
             this.sourcePathTextBox.Text = "D:\\_testData";
             // 
@@ -93,7 +94,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sourcePatternTextBox.Location = new System.Drawing.Point(12, 64);
             this.sourcePatternTextBox.Name = "sourcePatternTextBox";
-            this.sourcePatternTextBox.Size = new System.Drawing.Size(260, 20);
+            this.sourcePatternTextBox.Size = new System.Drawing.Size(448, 20);
             this.sourcePatternTextBox.TabIndex = 4;
             this.sourcePatternTextBox.Text = "*.htm?";
             // 
@@ -112,14 +113,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.targetFileTextBox.Location = new System.Drawing.Point(12, 103);
             this.targetFileTextBox.Name = "targetFileTextBox";
-            this.targetFileTextBox.Size = new System.Drawing.Size(219, 20);
+            this.targetFileTextBox.Size = new System.Drawing.Size(407, 20);
             this.targetFileTextBox.TabIndex = 6;
             this.targetFileTextBox.Text = "data.xml";
             // 
             // chooseTargetButton
             // 
             this.chooseTargetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chooseTargetButton.Location = new System.Drawing.Point(237, 101);
+            this.chooseTargetButton.Location = new System.Drawing.Point(425, 101);
             this.chooseTargetButton.Name = "chooseTargetButton";
             this.chooseTargetButton.Size = new System.Drawing.Size(35, 23);
             this.chooseTargetButton.TabIndex = 7;
@@ -141,7 +142,7 @@
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(207, 130);
+            this.stopButton.Location = new System.Drawing.Point(395, 130);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(65, 23);
             this.stopButton.TabIndex = 9;
@@ -187,14 +188,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(83, 130);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(118, 23);
+            this.progressBar1.Size = new System.Drawing.Size(306, 23);
             this.progressBar1.TabIndex = 13;
+            // 
+            // extractorListControl1
+            // 
+            this.extractorListControl1.Location = new System.Drawing.Point(12, 188);
+            this.extractorListControl1.Name = "extractorListControl1";
+            this.extractorListControl1.Size = new System.Drawing.Size(448, 223);
+            this.extractorListControl1.TabIndex = 14;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 191);
+            this.ClientSize = new System.Drawing.Size(472, 423);
+            this.Controls.Add(this.extractorListControl1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.taskStatusLabel);
@@ -235,6 +244,7 @@
         private System.Windows.Forms.Label taskStatusLabel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private ExtractorListControl extractorListControl1;
     }
 }
 

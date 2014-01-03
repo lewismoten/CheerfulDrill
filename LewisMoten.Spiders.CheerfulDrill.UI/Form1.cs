@@ -80,8 +80,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
         private void Shake(IProgress<SpiderJarProgress> progress)
         {
             var jar = new SpiderJar {ProgressReporter = progress};
-
-
+            jar.Extractors.AddRange(extractorListControl1.GetExtractors());
             jar.Path = sourcePathTextBox.Text;
             jar.SearchPattern = sourcePatternTextBox.Text;
             jar.Xml = targetFileTextBox.Text;
