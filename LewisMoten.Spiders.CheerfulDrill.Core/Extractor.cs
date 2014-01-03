@@ -25,6 +25,25 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             get { return _bits; }
         }
 
+        public object Clone()
+        {
+            var extractor = new Extractor
+                {
+                    Default = Default,
+                    Group = Group,
+                    Multiple = Multiple,
+                    Name = Name,
+                    Pattern = Pattern
+                };
+
+            foreach (Extractor bit in Bits)
+            {
+                extractor.Bits.Add((Extractor) bit.Clone());
+            }
+
+            return extractor;
+        }
+
         public List<Pinch> Extract(string text)
         {
             var pinches = new List<Pinch>();
@@ -70,25 +89,6 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             {
                 pinch.Pinches.AddRange(extractor.Extract(value));
             }
-        }
-
-        public object Clone()
-        {
-            var extractor = new Extractor
-                {
-                    Default = Default,
-                    Group = Group,
-                    Multiple = Multiple,
-                    Name = Name,
-                    Pattern = Pattern
-                };
-
-            foreach (var bit in Bits)
-            {
-                extractor.Bits.Add((Extractor)bit.Clone());
-            }
-
-            return extractor;
         }
     }
 }
