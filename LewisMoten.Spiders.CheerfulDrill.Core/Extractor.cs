@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
-    public class Extractor
+    public class Extractor : ICloneable
     {
         private readonly List<Extractor> _bits = new List<Extractor>();
 
@@ -69,6 +70,25 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             {
                 pinch.Pinches.AddRange(extractor.Extract(value));
             }
+        }
+
+        public object Clone()
+        {
+            var extractor = new Extractor
+                {
+                    Default = Default,
+                    Group = Group,
+                    Multiple = Multiple,
+                    Name = Name,
+                    Pattern = Pattern
+                };
+
+            foreach (var bit in Bits)
+            {
+                extractor.Bits.Add((Extractor)bit.Clone());
+            }
+
+            return extractor;
         }
     }
 }

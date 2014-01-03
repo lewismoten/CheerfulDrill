@@ -100,5 +100,67 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             List<Pinch> pinches = extractor.Extract("The cat had a ball.");
             Assert.That(pinches, Has.All.Property("Value").EqualTo("cat"));
         }
+
+        [Test]
+        public void ClonesWithADeepCopy()
+        {
+            var extractor = new Extractor
+                {
+                    Name = "name",
+                    Pattern = "Mr.( [^ ]*){2:3}",
+                    Default = "Unknown",
+                    Group = 1,
+                    Multiple = true,
+                };
+            extractor.Bits.Add(
+                new Extractor
+                    {
+                        Name = "First",
+                        Pattern = "^ ([^ ]*)",
+                        Default = "",
+                        Group = 1,
+                        Multiple = false
+                    });
+            extractor.Bits.Add(
+                new Extractor
+                    {
+                        Name = "Last",
+                        Pattern = " ([^ ]*)$",
+                        Default = "",
+                        Group = 1,
+                        Multiple = false
+                    });
+
+            var clone = extractor.Clone() as Extractor;
+
+            if (clone == null)
+            {
+                Assert.Fail();
+            }
+
+            Assert.That(clone, Is.Not.SameAs(extractor));
+            Assert.That(clone.Name, Is.EqualTo(extractor.Name));
+            Assert.That(clone.Pattern, Is.EqualTo(extractor.Pattern));
+            Assert.That(clone.Default, Is.EqualTo(extractor.Default));
+            Assert.That(clone.Group, Is.EqualTo(extractor.Group));
+            Assert.That(clone.Multiple, Is.EqualTo(extractor.Multiple));
+            Assert.That(clone.Bits, Is.Not.SameAs(extractor.Bits));
+            Assert.That(clone.Bits.Count, Is.EqualTo(extractor.Bits.Count));
+            Assert.That(clone.Bits.Count, Is.EqualTo(2));
+
+            for (int i = 0; i < extractor.Bits.Count; i++)
+            {
+                Assert.That(clone.Bits[i], Is.Not.Null);
+                Assert.That(clone.Bits[i], Is.Not.SameAs(extractor.Bits[i]));
+
+                Assert.That(clone.Bits[i].Name, Is.EqualTo(extractor.Bits[i].Name));
+                Assert.That(clone.Bits[i].Pattern, Is.EqualTo(extractor.Bits[i].Pattern));
+                Assert.That(clone.Bits[i].Default, Is.EqualTo(extractor.Bits[i].Default));
+                Assert.That(clone.Bits[i].Group, Is.EqualTo(extractor.Bits[i].Group));
+                Assert.That(clone.Bits[i].Multiple, Is.EqualTo(extractor.Bits[i].Multiple));
+                Assert.That(clone.Bits[i].Bits, Is.Not.SameAs(extractor.Bits[i].Bits));
+                Assert.That(clone.Bits[i].Bits.Count, Is.EqualTo(extractor.Bits[i].Bits.Count));
+            }
+        }
     }
 }
