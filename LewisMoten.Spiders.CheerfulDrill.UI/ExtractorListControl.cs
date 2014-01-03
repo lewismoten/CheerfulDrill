@@ -82,5 +82,18 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
                 }
             }
         }
+
+        private void RemoveButtonClick(object sender, EventArgs e)
+        {
+            if (listView1.SelectedIndices.Count < 1)
+            {
+                return;
+            }
+            var indicies = listView1.SelectedIndices.Cast<int>().OrderByDescending(i => i);
+            foreach (var indicy in indicies)
+            {
+                listView1.Items.RemoveAt(indicy);
+            }
+        }
     }
 }

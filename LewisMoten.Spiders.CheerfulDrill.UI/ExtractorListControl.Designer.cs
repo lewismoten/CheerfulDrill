@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button2 = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             this.addExtractorButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -40,15 +40,16 @@
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
-            // button2
+            // removeButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(280, 126);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(113, 23);
-            this.button2.TabIndex = 21;
-            this.button2.Text = "Remove Selected";
-            this.button2.UseVisualStyleBackColor = true;
+            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeButton.Location = new System.Drawing.Point(280, 126);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(113, 23);
+            this.removeButton.TabIndex = 21;
+            this.removeButton.Text = "Remove Selected";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.RemoveButtonClick);
             // 
             // addExtractorButton
             // 
@@ -119,7 +120,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.removeButton);
             this.Controls.Add(this.addExtractorButton);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.listView1);
@@ -132,7 +133,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button addExtractorButton;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ListView listView1;
