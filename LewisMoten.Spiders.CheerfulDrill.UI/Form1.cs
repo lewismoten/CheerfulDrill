@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -71,8 +72,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             var token = new CancellationTokenSource();
             components.Add(new Disposer(token.Dispose));
             _cancellationTokenSource = token;
-            IEnumerable<Extractor> extractors = extractorListControl1.GetExtractors();
-                // TODO: Get disconnected from list view
+            IEnumerable<Extractor> extractors = extractorListControl1.GetExtractors().ToArray();
             _task = Task.Factory.StartNew(() => Shake(_spiderJarProgress, extractors), token.Token);
         }
 
