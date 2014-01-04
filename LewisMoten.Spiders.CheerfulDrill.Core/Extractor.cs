@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using LewisMoten.Spiders.CheerfulDrill.Core.Json;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
-    public class Extractor : ICloneable
+    public class Extractor : ICloneable, IJsonSerializable
     {
         private readonly List<Extractor> _bits = new List<Extractor>();
 
@@ -42,6 +43,23 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             }
 
             return extractor;
+        }
+
+        public void ReadJson(JsonReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectOpener();
+            writer.Write("name", Name);
+            writer.Write("pattern", Pattern);
+            writer.Write("group", Group);
+            writer.Write("default", Default);
+            writer.Write("multiple", Multiple);
+            writer.WriteArray("bits", Bits);
+            writer.WriteObjectCloser();
         }
 
         public List<Pinch> Extract(string text)

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using LewisMoten.Spiders.CheerfulDrill.Core.Json;
 using NUnit.Framework;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
@@ -6,8 +8,33 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
     [TestFixture]
     public class ExtractorTest
     {
-        [Test]
-        public void ClonesWithADeepCopy()
+        private void AssertExtractorsHaveSameInformation(Extractor first, Extractor second)
+        {
+            Assert.That(first, Is.Not.SameAs(second));
+            Assert.That(first.Name, Is.EqualTo(second.Name));
+            Assert.That(first.Pattern, Is.EqualTo(second.Pattern));
+            Assert.That(first.Default, Is.EqualTo(second.Default));
+            Assert.That(first.Group, Is.EqualTo(second.Group));
+            Assert.That(first.Multiple, Is.EqualTo(second.Multiple));
+            Assert.That(first.Bits, Is.Not.SameAs(second.Bits));
+            Assert.That(first.Bits.Count, Is.EqualTo(second.Bits.Count));
+
+            for (int i = 0; i < second.Bits.Count; i++)
+            {
+                Assert.That(first.Bits[i], Is.Not.Null);
+                Assert.That(first.Bits[i], Is.Not.SameAs(second.Bits[i]));
+
+                Assert.That(first.Bits[i].Name, Is.EqualTo(second.Bits[i].Name));
+                Assert.That(first.Bits[i].Pattern, Is.EqualTo(second.Bits[i].Pattern));
+                Assert.That(first.Bits[i].Default, Is.EqualTo(second.Bits[i].Default));
+                Assert.That(first.Bits[i].Group, Is.EqualTo(second.Bits[i].Group));
+                Assert.That(first.Bits[i].Multiple, Is.EqualTo(second.Bits[i].Multiple));
+                Assert.That(first.Bits[i].Bits, Is.Not.SameAs(second.Bits[i].Bits));
+                Assert.That(first.Bits[i].Bits.Count, Is.EqualTo(second.Bits[i].Bits.Count));
+            }
+        }
+
+        private static Extractor GetComplexExtractor()
         {
             var extractor = new Extractor
                 {
@@ -35,37 +62,33 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
                         Group = 1,
                         Multiple = false
                     });
+            return extractor;
+        }
+
+        [Test]
+        public void CanSerializeAndDeserializeJson()
+        {
+            Extractor originalExtractor = GetComplexExtractor();
+            TextWriter textWriter = new StringWriter();
+            var jsonWriter = new JsonWriter(textWriter);
+            originalExtractor.WriteJson(jsonWriter);
+
+            TextReader textReader = new StringReader(textWriter.ToString());
+            var jsonReader = new JsonReader(textReader);
+            var restoredExtractor = new Extractor();
+            restoredExtractor.ReadJson(jsonReader);
+
+            AssertExtractorsHaveSameInformation(restoredExtractor, originalExtractor);
+        }
+
+        [Test]
+        public void ClonesWithADeepCopy()
+        {
+            Extractor extractor = GetComplexExtractor();
 
             var clone = extractor.Clone() as Extractor;
 
-            if (clone == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.That(clone, Is.Not.SameAs(extractor));
-            Assert.That(clone.Name, Is.EqualTo(extractor.Name));
-            Assert.That(clone.Pattern, Is.EqualTo(extractor.Pattern));
-            Assert.That(clone.Default, Is.EqualTo(extractor.Default));
-            Assert.That(clone.Group, Is.EqualTo(extractor.Group));
-            Assert.That(clone.Multiple, Is.EqualTo(extractor.Multiple));
-            Assert.That(clone.Bits, Is.Not.SameAs(extractor.Bits));
-            Assert.That(clone.Bits.Count, Is.EqualTo(extractor.Bits.Count));
-            Assert.That(clone.Bits.Count, Is.EqualTo(2));
-
-            for (int i = 0; i < extractor.Bits.Count; i++)
-            {
-                Assert.That(clone.Bits[i], Is.Not.Null);
-                Assert.That(clone.Bits[i], Is.Not.SameAs(extractor.Bits[i]));
-
-                Assert.That(clone.Bits[i].Name, Is.EqualTo(extractor.Bits[i].Name));
-                Assert.That(clone.Bits[i].Pattern, Is.EqualTo(extractor.Bits[i].Pattern));
-                Assert.That(clone.Bits[i].Default, Is.EqualTo(extractor.Bits[i].Default));
-                Assert.That(clone.Bits[i].Group, Is.EqualTo(extractor.Bits[i].Group));
-                Assert.That(clone.Bits[i].Multiple, Is.EqualTo(extractor.Bits[i].Multiple));
-                Assert.That(clone.Bits[i].Bits, Is.Not.SameAs(extractor.Bits[i].Bits));
-                Assert.That(clone.Bits[i].Bits.Count, Is.EqualTo(extractor.Bits[i].Bits.Count));
-            }
+            AssertExtractorsHaveSameInformation(clone, extractor);
         }
 
         [Test]
