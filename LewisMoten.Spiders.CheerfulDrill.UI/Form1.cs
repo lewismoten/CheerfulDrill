@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -67,8 +68,12 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             stopButton.Enabled = true;
             Application.DoEvents();
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            _task = Task.Factory.StartNew(() => Shake(_spiderJarProgress), _cancellationTokenSource.Token);
+            var token = new CancellationTokenSource();
+            components.Add(new Disposer(token.Dispose));
+            _cancellationTokenSource = token;
+            IEnumerable<Extractor> extractors = extractorListControl1.GetExtractors();
+                // TODO: Get disconnected from list view
+            _task = Task.Factory.StartNew(() => Shake(_spiderJarProgress, extractors), token.Token);
         }
 
         private void StopButtonClick(object sender, EventArgs e)
@@ -77,10 +82,10 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             stopButton.Enabled = false;
         }
 
-        private void Shake(IProgress<SpiderJarProgress> progress)
+        private void Shake(IProgress<SpiderJarProgress> progress, IEnumerable<Extractor> extractors)
         {
             var jar = new SpiderJar {ProgressReporter = progress};
-            jar.Extractors.AddRange(extractorListControl1.GetExtractors());
+            jar.Extractors.AddRange(extractors);
             jar.Path = sourcePathTextBox.Text;
             jar.SearchPattern = sourcePatternTextBox.Text;
             jar.Xml = targetFileTextBox.Text;

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Disposer.cs" />
     <Compile Include="ExtractorForm.cs">
       <SubType>Form</SubType>
     </Compile>

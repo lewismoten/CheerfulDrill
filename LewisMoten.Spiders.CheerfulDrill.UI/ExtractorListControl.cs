@@ -89,8 +89,8 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             {
                 return;
             }
-            var indicies = listView1.SelectedIndices.Cast<int>().OrderByDescending(i => i);
-            foreach (var indicy in indicies)
+            IOrderedEnumerable<int> indicies = listView1.SelectedIndices.Cast<int>().OrderByDescending(i => i);
+            foreach (int indicy in indicies)
             {
                 listView1.Items.RemoveAt(indicy);
             }
