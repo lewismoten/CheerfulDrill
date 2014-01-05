@@ -30,7 +30,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
                 listView1.Items.Cast<ListViewItem>()
                          .Select(i => i.Tag)
                          .Cast<Extractor>()
-                         .Select(e=>e.Copy());
+                         .Select(e => e.Copy());
         }
 
         private void ListView1DoubleClick(object sender, EventArgs e)

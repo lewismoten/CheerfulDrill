@@ -70,11 +70,38 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to JavaScript Object Notation files (*.json)|*.json|All files (*.*)|*.*.
+        /// </summary>
+        internal static string JsonFileFilter {
+            get {
+                return ResourceManager.GetString("JsonFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Extractors....
+        /// </summary>
+        internal static string LoadExtractorsTitle {
+            get {
+                return ResourceManager.GetString("LoadExtractorsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Data As....
         /// </summary>
         internal static string SaveDataAs {
             get {
                 return ResourceManager.GetString("SaveDataAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Extractors As.
+        /// </summary>
+        internal static string SaveExtractorsTitle {
+            get {
+                return ResourceManager.GetString("SaveExtractorsTitle", resourceCulture);
             }
         }
         

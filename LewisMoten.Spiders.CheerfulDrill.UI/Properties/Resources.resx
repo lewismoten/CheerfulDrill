@@ -123,4 +123,13 @@
   <data name="SaveDataAs" xml:space="preserve">
     <value>Save Data As...</value>
   </data>
+  <data name="SaveExtractorsTitle" xml:space="preserve">
+    <value>Save Extractors As</value>
+  </data>
+  <data name="LoadExtractorsTitle" xml:space="preserve">
+    <value>Load Extractors...</value>
+  </data>
+  <data name="JsonFileFilter" xml:space="preserve">
+    <value>JavaScript Object Notation files (*.json)|*.json|All files (*.*)|*.*</value>
+  </data>
 </root>

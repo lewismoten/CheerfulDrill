@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,8 +18,8 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
         private static int _recordsFound;
         private readonly Progress<SpiderJarProgress> _spiderJarProgress = new Progress<SpiderJarProgress>();
         private CancellationTokenSource _cancellationTokenSource;
+        private string _extractorPath = "extractors.json";
         private Task _task;
-
 
         public Form1()
         {
@@ -124,6 +125,46 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             label5.Text = string.Format(@"Records Found: {0}", _recordsFound);
 
             Application.DoEvents();
+        }
+
+        private void SaveExtractors(object sender, EventArgs e)
+        {
+            saveFileDialog1.AddExtension = true;
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.DefaultExt = "json";
+            saveFileDialog1.Filter = Resources.JsonFileFilter;
+            saveFileDialog1.InitialDirectory = _extractorPath;
+            saveFileDialog1.OverwritePrompt = true;
+            saveFileDialog1.Title = Resources.SaveExtractorsTitle;
+            DialogResult answer = saveFileDialog1.ShowDialog(this);
+            if (answer == DialogResult.OK)
+            {
+                _extractorPath = saveFileDialog1.FileName;
+                File.WriteAllText(_extractorPath, extractorListControl1.GetExtractors().ToList().ToJson());
+            }
+        }
+
+        private void LoadExtractors(object sender, EventArgs e)
+        {
+            openFileDialog1.AddExtension = true;
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.DefaultExt = "json";
+            openFileDialog1.Filter = Resources.JsonFileFilter;
+            openFileDialog1.InitialDirectory = _extractorPath;
+            openFileDialog1.Title = Resources.LoadExtractorsTitle;
+            DialogResult answer = openFileDialog1.ShowDialog(this);
+            if (answer == DialogResult.OK)
+            {
+                _extractorPath = openFileDialog1.FileName;
+                string json = File.ReadAllText(_extractorPath);
+                List<Extractor> extractors = ((List<Extractor>) null).FromJson(json);
+                extractorListControl1.PopulateExtractors(extractors);
+            }
+        }
+
+        private void StopApplication(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
