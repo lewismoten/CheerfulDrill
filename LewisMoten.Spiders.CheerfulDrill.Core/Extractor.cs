@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using LewisMoten.Spiders.CheerfulDrill.Core.Json;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core
 {
-    public class Extractor : ICloneable, IJsonSerializable
+    public class Extractor : IEquatable<Extractor>
     {
-        private readonly List<Extractor> _bits = new List<Extractor>();
+        private static readonly IEqualityComparer<Extractor> ExtractorComparerInstance =
+            ((Extractor) null).GetComparer();
+
+        private readonly IList<Extractor> _bits = new List<Extractor>();
 
         public Extractor()
         {
@@ -21,45 +23,14 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
         public string Default { get; set; }
         public bool Multiple { get; set; }
 
-        public List<Extractor> Bits
+        public IList<Extractor> Bits
         {
             get { return _bits; }
         }
 
-        public object Clone()
+        public bool Equals(Extractor other)
         {
-            var extractor = new Extractor
-                {
-                    Default = Default,
-                    Group = Group,
-                    Multiple = Multiple,
-                    Name = Name,
-                    Pattern = Pattern
-                };
-
-            foreach (Extractor bit in Bits)
-            {
-                extractor.Bits.Add((Extractor) bit.Clone());
-            }
-
-            return extractor;
-        }
-
-        public void ReadJson(JsonReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteJson(JsonWriter writer)
-        {
-            writer.WriteObjectOpener();
-            writer.Write("name", Name);
-            writer.Write("pattern", Pattern);
-            writer.Write("group", Group);
-            writer.Write("default", Default);
-            writer.Write("multiple", Multiple);
-            writer.WriteArray("bits", Bits);
-            writer.WriteObjectCloser();
+            return ExtractorComparerInstance.Equals(this, other);
         }
 
         public List<Pinch> Extract(string text)
@@ -106,6 +77,37 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core
             foreach (Extractor extractor in Bits)
             {
                 pinch.Pinches.AddRange(extractor.Extract(value));
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Extractor) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return ExtractorComparerInstance.GetHashCode(this);
+        }
+
+        public static bool operator ==(Extractor left, Extractor right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Extractor left, Extractor right)
+        {
+            return !Equals(left, right);
+        }
+
+        public void AddBits(IEnumerable<Extractor> extractors)
+        {
+            foreach (Extractor extractor in extractors)
+            {
+                Bits.Add(extractor);
             }
         }
     }

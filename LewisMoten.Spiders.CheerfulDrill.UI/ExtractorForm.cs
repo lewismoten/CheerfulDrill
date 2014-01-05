@@ -16,7 +16,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
 
         public void PopulateFromExtractor(Extractor extractor)
         {
-            Extractor = (Extractor) extractor.Clone();
+            Extractor = extractor.Copy();
             nameTextBox.Text = Extractor.Name;
             defaultValueTextBox.Text = Extractor.Default;
             captureNumericUpDown.Value = Extractor.Group > -1 ? Extractor.Group : 0;
@@ -36,7 +36,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             Extractor.Multiple = ! allowMultipleCheckBox.Checked;
             Extractor.Pattern = patternTextBox.Text;
             Extractor.Bits.Clear();
-            Extractor.Bits.AddRange(extractorListControl1.GetExtractors());
+            Extractor.AddBits(extractorListControl1.GetExtractors());
             DialogResult = DialogResult.OK;
             Close();
         }

@@ -30,8 +30,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
                 listView1.Items.Cast<ListViewItem>()
                          .Select(i => i.Tag)
                          .Cast<Extractor>()
-                         .Select(e => e.Clone())
-                         .Cast<Extractor>();
+                         .Select(e=>e.Copy());
         }
 
         private void ListView1DoubleClick(object sender, EventArgs e)
@@ -47,8 +46,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             }
             using (var form = new ExtractorForm())
             {
-                extractor = extractor.Clone() as Extractor;
-                form.PopulateFromExtractor(extractor);
+                form.PopulateFromExtractor(extractor.Copy());
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     UpdateExtractorListItem(listView1.SelectedItems[0], form.Extractor);
@@ -67,7 +65,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.UI
             item.SubItems.Add(extractor.Bits.Count == 0
                                   ? "None"
                                   : extractor.Bits.Count.ToString(CultureInfo.InvariantCulture));
-            item.Tag = extractor.Clone();
+            item.Tag = extractor.Copy();
         }
 
         private void AddExtractorButtonClick(object sender, EventArgs e)

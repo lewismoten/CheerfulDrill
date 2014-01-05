@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using LewisMoten.Spiders.CheerfulDrill.Core.Json;
 using NUnit.Framework;
 
 namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
@@ -34,7 +32,7 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
             }
         }
 
-        private static Extractor GetComplexExtractor()
+        internal static Extractor GetComplexExtractor()
         {
             var extractor = new Extractor
                 {
@@ -69,26 +67,13 @@ namespace LewisMoten.Spiders.CheerfulDrill.Core.Tests
         public void CanSerializeAndDeserializeJson()
         {
             Extractor originalExtractor = GetComplexExtractor();
-            TextWriter textWriter = new StringWriter();
-            var jsonWriter = new JsonWriter(textWriter);
-            originalExtractor.WriteJson(jsonWriter);
-
-            TextReader textReader = new StringReader(textWriter.ToString());
-            var jsonReader = new JsonReader(textReader);
-            var restoredExtractor = new Extractor();
-            restoredExtractor.ReadJson(jsonReader);
+            string json = originalExtractor.ToJson();
+            Extractor restoredExtractor = originalExtractor.FromJson(json);
 
             AssertExtractorsHaveSameInformation(restoredExtractor, originalExtractor);
-        }
 
-        [Test]
-        public void ClonesWithADeepCopy()
-        {
-            Extractor extractor = GetComplexExtractor();
-
-            var clone = extractor.Clone() as Extractor;
-
-            AssertExtractorsHaveSameInformation(clone, extractor);
+            string json2 = restoredExtractor.ToJson();
+            Assert.That(json, Is.EqualTo(json2));
         }
 
         [Test]
